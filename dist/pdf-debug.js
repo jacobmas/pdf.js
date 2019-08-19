@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.118';
-var pdfjsBuild = 'c1c20f94';
+var pdfjsVersion = '2.1.119';
+var pdfjsBuild = '8b135ffd';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -9793,7 +9793,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.1.118',
+    apiVersion: '2.1.119',
     source: {
       data: source.data,
       url: source.url,
@@ -11836,9 +11836,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.1.118';
+var version = '2.1.119';
 exports.version = version;
-var build = 'c1c20f94';
+var build = '8b135ffd';
 exports.build = build;
 
 /***/ }),
@@ -16090,6 +16090,8 @@ function MessageHandler(sourceName, targetName, comObj) {
   this.sourceName = sourceName;
   this.targetName = targetName;
   this.comObj = comObj;
+  console.log("sourceName=" + sourceName + ",targetName=" + targetName + "comObj=");
+  console.log(comObj);
   this.callbackId = 1;
   this.streamId = 1;
   this.postMessageTransfers = true;
@@ -16180,6 +16182,7 @@ MessageHandler.prototype = {
     this.postMessage(message, transfers);
   },
   sendWithPromise: function sendWithPromise(actionName, data, transfers) {
+    console.log("In sendWithPromise, actionname=" + actionName);
     var callbackId = this.callbackId++;
     var message = {
       sourceName: this.sourceName,
