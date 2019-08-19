@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.117';
-var pdfjsBuild = '3c419db2';
+var pdfjsVersion = '2.1.118';
+var pdfjsBuild = 'c1c20f94';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -9624,7 +9624,9 @@ function setPDFNetworkStreamFactory(pdfNetworkStreamFactory) {
 }
 
 function getDocument(src) {
+  console.log("pre PDFDocumentLoadingTask create");
   var task = new PDFDocumentLoadingTask();
+  console.log("post PDFDocumentLoadingTask create");
   var source;
 
   if (typeof src === 'string') {
@@ -9654,6 +9656,7 @@ function getDocument(src) {
   var params = Object.create(null);
   var rangeTransport = null,
       worker = null;
+  console.log("post params, rangeTransport");
 
   for (var key in source) {
     if (key === 'url' && typeof window !== 'undefined') {
@@ -9777,6 +9780,8 @@ function getDocument(src) {
 }
 
 function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
+  console.log("Begin _fetchDocument");
+
   if (worker.destroyed) {
     return Promise.reject(new Error('Worker was destroyed'));
   }
@@ -9788,7 +9793,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.1.117',
+    apiVersion: '2.1.118',
     source: {
       data: source.data,
       url: source.url,
@@ -11831,9 +11836,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.1.117';
+var version = '2.1.118';
 exports.version = version;
-var build = '3c419db2';
+var build = 'c1c20f94';
 exports.build = build;
 
 /***/ }),
