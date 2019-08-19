@@ -93,7 +93,7 @@ NetworkManager.prototype = {
 	var xhr = this.getXhr();
 	var xhrId = this.currXhrId++;
 	var pendingRequest = this.pendingRequests[xhrId] = {
-	    my_GMrequest,
+	    xhr,
 	}; // xhr,
 	
 	xhr.open('GET', this.url);
