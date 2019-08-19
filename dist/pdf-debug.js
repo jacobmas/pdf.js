@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.116';
-var pdfjsBuild = 'ee959b77';
+var pdfjsVersion = '2.1.117';
+var pdfjsBuild = '3c419db2';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -9788,7 +9788,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.1.116',
+    apiVersion: '2.1.117',
     source: {
       data: source.data,
       url: source.url,
@@ -11831,9 +11831,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.1.116';
+var version = '2.1.117';
 exports.version = version;
-var build = 'ee959b77';
+var build = '3c419db2';
 exports.build = build;
 
 /***/ }),
@@ -22583,6 +22583,7 @@ NetworkManager.prototype = {
     return this.request(listeners);
   },
   request: function NetworkManager_request(args) {
+    console.log("in function NetworkManager_request");
     var my_GMrequest = {};
     var xhr = this.getXhr();
     var xhrId = this.currXhrId++;
@@ -22646,6 +22647,7 @@ NetworkManager.prototype = {
       my_GMrequest.headers['Range'] = 'bytes=' + rangeStr;
     }
 
+    console.log("in function NetworkManager_request, trying my_GMrequest");
     GM_xmlhttprequest(my_GMrequest);
     return xhrId;
   },
