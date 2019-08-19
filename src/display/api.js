@@ -211,9 +211,9 @@ function setPDFNetworkStreamFactory(pdfNetworkStreamFactory) {
 
 /**
  * This is the main entry point for loading a PDF and interacting with it.
- * NOTE: If a URL is used to fetch the PDF data a standard XMLHttpRequest(XHR)
- * is used, which means it must follow the same origin rules that any XHR does
- * e.g. No cross domain requests without CORS.
+ * NOTE (CHANGE FROM standard PDF.js): 
+ * If a URL is used to fetch the PDF data a GM_xmlhttprequest
+ * is used, which means it allows cross domain requests. 
  *
  * @param {string|TypedArray|DocumentInitParameters|PDFDataRangeTransport} src
  * Can be a url to where a PDF is located, a typed array (Uint8Array)

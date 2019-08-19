@@ -88,56 +88,63 @@ NetworkManager.prototype = {
     return this.request(listeners);
   },
 
-  request: function NetworkManager_request(args) {
-    var xhr = this.getXhr();
-    var xhrId = this.currXhrId++;
-    var pendingRequest = this.pendingRequests[xhrId] = {
-      xhr,
-    };
+    request: function NetworkManager_request(args) {
+	var my_GMrequest={}; // the TamperMonkey request
+	var xhr = this.getXhr();
+	var xhrId = this.currXhrId++;
+	var pendingRequest = this.pendingRequests[xhrId] = {
+	    my_GMrequest,
+	}; // xhr,
+	
+	xhr.open('GET', this.url);
+	xhr.withCredentials = this.withCredentials;
+	for (var property in this.httpHeaders) {
+	    var value = this.httpHeaders[property];
+	    if (typeof value === 'undefined') {
+		continue;
+	    }
+	    xhr.setRequestHeader(property, value);
+	}
+	if (this.isHttp && 'begin' in args && 'end' in args) {
+	    var rangeStr = args.begin + '-' + (args.end - 1);
+	    xhr.setRequestHeader('Range', 'bytes=' + rangeStr);
+	    pendingRequest.expectedStatus = 206;
+	} else {
+	    pendingRequest.expectedStatus = 200;
+	}
 
-    xhr.open('GET', this.url);
-    xhr.withCredentials = this.withCredentials;
-    for (var property in this.httpHeaders) {
-      var value = this.httpHeaders[property];
-      if (typeof value === 'undefined') {
-        continue;
-      }
-      xhr.setRequestHeader(property, value);
-    }
-    if (this.isHttp && 'begin' in args && 'end' in args) {
-      var rangeStr = args.begin + '-' + (args.end - 1);
-      xhr.setRequestHeader('Range', 'bytes=' + rangeStr);
-      pendingRequest.expectedStatus = 206;
-    } else {
-      pendingRequest.expectedStatus = 200;
-    }
+	var useMozChunkedLoading = supportsMozChunked && !!args.onProgressiveData;
+	if (useMozChunkedLoading) {
+	    xhr.responseType = 'moz-chunked-arraybuffer';
+	    pendingRequest.onProgressiveData = args.onProgressiveData;
+	    pendingRequest.mozChunked = true;
+	} else {
+	    xhr.responseType = 'arraybuffer';
+	}
 
-    var useMozChunkedLoading = supportsMozChunked && !!args.onProgressiveData;
-    if (useMozChunkedLoading) {
-      xhr.responseType = 'moz-chunked-arraybuffer';
-      pendingRequest.onProgressiveData = args.onProgressiveData;
-      pendingRequest.mozChunked = true;
-    } else {
-      xhr.responseType = 'arraybuffer';
-    }
+	if (args.onError) {
+	    xhr.onerror = function(evt) {
+		args.onError(xhr.status);
+	    };
+	}
+	xhr.onreadystatechange = this.onStateChange.bind(this, xhrId);
+	xhr.onprogress = this.onProgress.bind(this, xhrId);
 
-    if (args.onError) {
-      xhr.onerror = function(evt) {
-        args.onError(xhr.status);
-      };
-    }
-    xhr.onreadystatechange = this.onStateChange.bind(this, xhrId);
-    xhr.onprogress = this.onProgress.bind(this, xhrId);
+	pendingRequest.onHeadersReceived = args.onHeadersReceived;
+	pendingRequest.onDone = args.onDone;
+	pendingRequest.onError = args.onError;
+	pendingRequest.onProgress = args.onProgress;
 
-    pendingRequest.onHeadersReceived = args.onHeadersReceived;
-    pendingRequest.onDone = args.onDone;
-    pendingRequest.onError = args.onError;
-    pendingRequest.onProgress = args.onProgress;
 
-    xhr.send(null);
-
-    return xhrId;
-  },
+	Object.assign(my_GMrequest,{method:'GET',url:this.url,headers:this.httpHeaders,responseType:xhr.responseType,
+				    onerror:xhr.onerror,onreadystatechange:xhr.onreadystatechange,onprogress:xhr.onprogress});
+	if (this.isHttp && 'begin' in args && 'end' in args) {	   
+	    my_GMrequest.headers['Range']='bytes=' + rangeStr;
+	}
+	//xhr.send(null);
+	GM_xmlhttprequest(my_GMrequest);
+	return xhrId;
+    },
 
   onProgress: function NetworkManager_onProgress(xhrId, evt) {
     var pendingRequest = this.pendingRequests[xhrId];
