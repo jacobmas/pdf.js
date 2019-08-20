@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.122';
-var pdfjsBuild = 'fcb3fb91';
+var pdfjsVersion = '2.1.123';
+var pdfjsBuild = 'f299b6f2';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -9793,7 +9793,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.1.122',
+    apiVersion: '2.1.123',
     source: {
       data: source.data,
       url: source.url,
@@ -11837,9 +11837,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.1.122';
+var version = '2.1.123';
 exports.version = version;
-var build = 'fcb3fb91';
+var build = 'f299b6f2';
 exports.build = build;
 
 /***/ }),
@@ -22202,8 +22202,6 @@ var PDFFetchStreamReader =
 /*#__PURE__*/
 function () {
   function PDFFetchStreamReader(stream) {
-    var _this = this;
-
     _classCallCheck(this, PDFFetchStreamReader);
 
     this._stream = stream;
@@ -22240,14 +22238,20 @@ function () {
     }
 
     var url = source.url;
-    fetch(url, createFetchOptions(this._headers, this._withCredentials, this._abortController)).then(function (response) {
+    var myGM_fetch_request = {
+      url: source.url,
+      method: 'GET',
+      headers: this._headers
+    };
+
+    myGM_fetch_request.onload = function (response) {
       if (!(0, _network_utils.validateResponseStatus)(response.status)) {
         throw (0, _network_utils.createResponseStatusError)(response.status, url);
       }
 
-      _this._reader = response.body.getReader();
+      this._reader = response.body.getReader();
 
-      _this._headersCapability.resolve();
+      this._headersCapability.resolve();
 
       var getResponseHeader = function getResponseHeader(name) {
         return response.headers.get(name);
@@ -22255,21 +22259,24 @@ function () {
 
       var _validateRangeRequest = (0, _network_utils.validateRangeRequestCapabilities)({
         getResponseHeader: getResponseHeader,
-        isHttp: _this._stream.isHttp,
-        rangeChunkSize: _this._rangeChunkSize,
-        disableRange: _this._disableRange
+        isHttp: this._stream.isHttp,
+        rangeChunkSize: this._rangeChunkSize,
+        disableRange: this._disableRange
       }),
           allowRangeRequests = _validateRangeRequest.allowRangeRequests,
           suggestedLength = _validateRangeRequest.suggestedLength;
 
-      _this._isRangeSupported = allowRangeRequests;
-      _this._contentLength = suggestedLength || _this._contentLength;
-      _this._filename = (0, _network_utils.extractFilenameFromHeader)(getResponseHeader);
+      this._isRangeSupported = allowRangeRequests;
+      this._contentLength = suggestedLength || this._contentLength;
+      this._filename = (0, _network_utils.extractFilenameFromHeader)(getResponseHeader);
 
-      if (!_this._isStreamingSupported && _this._isRangeSupported) {
-        _this.cancel(new _util.AbortException('streaming is disabled'));
+      if (!this._isStreamingSupported && this._isRangeSupported) {
+        this.cancel(new _util.AbortException('streaming is disabled'));
       }
-    }).catch(this._headersCapability.reject);
+    };
+
+    myGM_fetch_request.onerror = myGM_fetch_request.ontimeout = this._headersCapability.reject;
+    var response = GM_xmlhttpRequest(myGM_fetch_request);
     this.onProgress = null;
   }
 
@@ -22380,8 +22387,6 @@ var PDFFetchStreamRangeReader =
 /*#__PURE__*/
 function () {
   function PDFFetchStreamRangeReader(stream, begin, end) {
-    var _this2 = this;
-
     _classCallCheck(this, PDFFetchStreamRangeReader);
 
     this._stream = stream;
@@ -22413,15 +22418,23 @@ function () {
     this._headers.append('Range', 'bytes=' + rangeStr);
 
     var url = source.url;
-    fetch(url, createFetchOptions(this._headers, this._withCredentials, this._abortController)).then(function (response) {
+    var myGM_fetch_request = {
+      url: source.url,
+      method: 'GET',
+      headers: this._headers
+    };
+
+    myGM_fetch_request.onload = function (response) {
       if (!(0, _network_utils.validateResponseStatus)(response.status)) {
         throw (0, _network_utils.createResponseStatusError)(response.status, url);
       }
 
-      _this2._readCapability.resolve();
+      this._readCapability.resolve();
 
-      _this2._reader = response.body.getReader();
-    });
+      this._reader = response.body.getReader();
+    };
+
+    var response = GM_xmlhttpRequest(myGM_fetch_request);
     this.onProgress = null;
   }
 
