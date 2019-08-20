@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.123';
-var pdfjsBuild = 'f299b6f2';
+var pdfjsVersion = '2.1.124';
+var pdfjsBuild = '160e54eb';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -9793,7 +9793,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.1.123',
+    apiVersion: '2.1.124',
     source: {
       data: source.data,
       url: source.url,
@@ -11837,9 +11837,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.1.123';
+var version = '2.1.124';
 exports.version = version;
-var build = 'f299b6f2';
+var build = '160e54eb';
 exports.build = build;
 
 /***/ }),
@@ -22241,7 +22241,8 @@ function () {
     var myGM_fetch_request = {
       url: source.url,
       method: 'GET',
-      headers: this._headers
+      headers: this._headers,
+      fetch: true
     };
 
     myGM_fetch_request.onload = function (response) {
@@ -22421,7 +22422,8 @@ function () {
     var myGM_fetch_request = {
       url: source.url,
       method: 'GET',
-      headers: this._headers
+      headers: this._headers,
+      fetch: true
     };
 
     myGM_fetch_request.onload = function (response) {
