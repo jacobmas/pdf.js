@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.127';
-var pdfjsBuild = '85ff0360';
+var pdfjsVersion = '2.1.128';
+var pdfjsBuild = '8f2aa1e4';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -9793,7 +9793,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.1.127',
+    apiVersion: '2.1.128',
     source: {
       data: source.data,
       url: source.url,
@@ -11837,9 +11837,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.1.127';
+var version = '2.1.128';
 exports.version = version;
-var build = '85ff0360';
+var build = '8f2aa1e4';
 exports.build = build;
 
 /***/ }),
@@ -22268,8 +22268,13 @@ function () {
       self._headersCapability.resolve();
 
       var getResponseHeader = function getResponseHeader(name) {
-        return response.headers.get(name);
+        var match,
+            re = new RegExp(name + ":" + "(.*)");
+        match = response.responseHeaders.match(re);
+        return match ? match[1] : "";
       };
+
+      console.log("self._stream.isHttp=" + self._stream.isHttp + ", _rangeChunkSize " + self._rangeChunkSize + ", disableRange" + self._disableRange);
 
       var _validateRangeRequest = (0, _network_utils.validateRangeRequestCapabilities)({
         getResponseHeader: getResponseHeader,
