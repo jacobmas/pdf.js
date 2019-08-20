@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.126';
-var pdfjsBuild = 'a88fd0c6';
+var pdfjsVersion = '2.1.127';
+var pdfjsBuild = '85ff0360';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -9793,7 +9793,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.1.126',
+    apiVersion: '2.1.127',
     source: {
       data: source.data,
       url: source.url,
@@ -11837,9 +11837,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.1.126';
+var version = '2.1.127';
 exports.version = version;
-var build = 'a88fd0c6';
+var build = '85ff0360';
 exports.build = build;
 
 /***/ }),
@@ -22238,6 +22238,7 @@ function () {
     }
 
     var url = source.url;
+    var self = this;
     var myGM_fetch_request = {
       url: source.url,
       method: 'GET',
@@ -22254,7 +22255,7 @@ function () {
         throw (0, _network_utils.createResponseStatusError)(response.status, url);
       }
 
-      this._reader = new ReadableStream({
+      self._reader = new ReadableStream({
         start: function start(controller) {
           controller.enqueue(response.responseText);
         },
@@ -22264,7 +22265,7 @@ function () {
         }
       });
 
-      this._headersCapability.resolve();
+      self._headersCapability.resolve();
 
       var getResponseHeader = function getResponseHeader(name) {
         return response.headers.get(name);
@@ -22272,19 +22273,19 @@ function () {
 
       var _validateRangeRequest = (0, _network_utils.validateRangeRequestCapabilities)({
         getResponseHeader: getResponseHeader,
-        isHttp: this._stream.isHttp,
-        rangeChunkSize: this._rangeChunkSize,
-        disableRange: this._disableRange
+        isHttp: self._stream.isHttp,
+        rangeChunkSize: self._rangeChunkSize,
+        disableRange: self._disableRange
       }),
           allowRangeRequests = _validateRangeRequest.allowRangeRequests,
           suggestedLength = _validateRangeRequest.suggestedLength;
 
-      this._isRangeSupported = allowRangeRequests;
-      this._contentLength = suggestedLength || this._contentLength;
-      this._filename = (0, _network_utils.extractFilenameFromHeader)(getResponseHeader);
+      self._isRangeSupported = allowRangeRequests;
+      self._contentLength = suggestedLength || self._contentLength;
+      self._filename = (0, _network_utils.extractFilenameFromHeader)(getResponseHeader);
 
-      if (!this._isStreamingSupported && this._isRangeSupported) {
-        this.cancel(new _util.AbortException('streaming is disabled'));
+      if (!self._isStreamingSupported && self._isRangeSupported) {
+        self.cancel(new _util.AbortException('streaming is disabled'));
       }
     };
 
