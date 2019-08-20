@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.125';
-var pdfjsBuild = '6873353c';
+var pdfjsVersion = '2.1.126';
+var pdfjsBuild = 'a88fd0c6';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -9793,7 +9793,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.1.125',
+    apiVersion: '2.1.126',
     source: {
       data: source.data,
       url: source.url,
@@ -11837,9 +11837,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.1.125';
+var version = '2.1.126';
 exports.version = version;
-var build = '6873353c';
+var build = 'a88fd0c6';
 exports.build = build;
 
 /***/ }),
@@ -22254,7 +22254,15 @@ function () {
         throw (0, _network_utils.createResponseStatusError)(response.status, url);
       }
 
-      this._reader = response.body.getReader();
+      this._reader = new ReadableStream({
+        start: function start(controller) {
+          controller.enqueue(response.responseText);
+        },
+        pull: function pull(controller) {},
+        cancel: function cancel() {
+          clearInterval(interval);
+        }
+      });
 
       this._headersCapability.resolve();
 
