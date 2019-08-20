@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.124';
-var pdfjsBuild = '160e54eb';
+var pdfjsVersion = '2.1.125';
+var pdfjsBuild = '6873353c';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -9793,7 +9793,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.1.124',
+    apiVersion: '2.1.125',
     source: {
       data: source.data,
       url: source.url,
@@ -11837,9 +11837,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.1.124';
+var version = '2.1.125';
 exports.version = version;
-var build = '160e54eb';
+var build = '6873353c';
 exports.build = build;
 
 /***/ }),
@@ -22242,10 +22242,14 @@ function () {
       url: source.url,
       method: 'GET',
       headers: this._headers,
-      fetch: true
+      fetch: true,
+      mode: 'no-cors'
     };
 
     myGM_fetch_request.onload = function (response) {
+      console.log("respnse from fetch_request=");
+      console.log(response);
+
       if (!(0, _network_utils.validateResponseStatus)(response.status)) {
         throw (0, _network_utils.createResponseStatusError)(response.status, url);
       }
@@ -22423,10 +22427,13 @@ function () {
       url: source.url,
       method: 'GET',
       headers: this._headers,
-      fetch: true
+      fetch: true,
+      mode: 'no-cors'
     };
 
     myGM_fetch_request.onload = function (response) {
+      console.log(response);
+
       if (!(0, _network_utils.validateResponseStatus)(response.status)) {
         throw (0, _network_utils.createResponseStatusError)(response.status, url);
       }
