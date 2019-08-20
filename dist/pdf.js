@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.121';
-var pdfjsBuild = '3dd66959';
+var pdfjsVersion = '2.1.122';
+var pdfjsBuild = 'fcb3fb91';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -9793,7 +9793,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.1.121',
+    apiVersion: '2.1.122',
     source: {
       data: source.data,
       url: source.url,
@@ -10661,6 +10661,7 @@ var PDFWorker = function PDFWorkerClosure() {
 
     var loader = fakeWorkerFilesLoader || function () {
       return (0, _dom_utils.loadScript)(_getWorkerSrc()).then(function () {
+        console.log("Script loaded from getWorkerSrc");
         return window.pdfjsWorker.WorkerMessageHandler;
       });
     };
@@ -11836,9 +11837,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.1.121';
+var version = '2.1.122';
 exports.version = version;
-var build = '3dd66959';
+var build = 'fcb3fb91';
 exports.build = build;
 
 /***/ }),
@@ -12963,6 +12964,7 @@ function () {
 exports.DummyStatTimer = DummyStatTimer;
 
 function loadScript(src) {
+  console.log("Loading script in dom_utils.js:loadScript, src=" + src);
   return new Promise(function (resolve, reject) {
     var script = document.createElement('script');
     script.src = src;
@@ -16090,7 +16092,7 @@ function MessageHandler(sourceName, targetName, comObj) {
   this.sourceName = sourceName;
   this.targetName = targetName;
   this.comObj = comObj;
-  console.log("sourceName=" + sourceName + ",targetName=" + targetName + "comObj=");
+  console.log("sourceName=" + sourceName + ",targetName=" + targetName + ", comObj=");
   console.log(comObj);
   this.callbackId = 1;
   this.streamId = 1;

@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.121';
-var pdfjsBuild = '3dd66959';
+var pdfjsVersion = '2.1.122';
+var pdfjsBuild = 'fcb3fb91';
 
 var pdfjsCoreWorker = __w_pdfjs_require__(1);
 
@@ -377,7 +377,7 @@ var WorkerMessageHandler = {
     var cancelXHRs = null;
     var WorkerTasks = [];
     var apiVersion = docParams.apiVersion;
-    var workerVersion = '2.1.121';
+    var workerVersion = '2.1.122';
 
     if (apiVersion !== workerVersion) {
       throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));
@@ -54112,7 +54112,7 @@ function MessageHandler(sourceName, targetName, comObj) {
   this.sourceName = sourceName;
   this.targetName = targetName;
   this.comObj = comObj;
-  console.log("sourceName=" + sourceName + ",targetName=" + targetName + "comObj=");
+  console.log("sourceName=" + sourceName + ",targetName=" + targetName + ", comObj=");
   console.log(comObj);
   this.callbackId = 1;
   this.streamId = 1;
