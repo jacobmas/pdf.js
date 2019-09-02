@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.130';
-var pdfjsBuild = 'f28ee82b';
+var pdfjsVersion = '2.1.131';
+var pdfjsBuild = '7152b7e1';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -9739,11 +9739,15 @@ function getDocument(src) {
 
   var docId = task.docId;
   worker.promise.then(function () {
+    console.log("worker_promise_then");
+
     if (task.destroyed) {
       throw new Error('Loading aborted');
     }
 
     return _fetchDocument(worker, params, rangeTransport, docId).then(function (workerId) {
+      console.log("_fetchDocument.then");
+
       if (task.destroyed) {
         throw new Error('Loading aborted');
       }
@@ -9793,7 +9797,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.1.130',
+    apiVersion: '2.1.131',
     source: {
       data: source.data,
       url: source.url,
@@ -11837,9 +11841,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.1.130';
+var version = '2.1.131';
 exports.version = version;
-var build = 'f28ee82b';
+var build = '7152b7e1';
 exports.build = build;
 
 /***/ }),
@@ -22261,6 +22265,7 @@ function () {
           console.log("in readablestream start,controller=" + controller);
           console.log(controller);
           controller.enqueue(response.responseText);
+          console.log(controller);
         },
         pull: function pull(controller) {
           console.log("in readablestream pull,controller=" + controller);
