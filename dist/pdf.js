@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.129';
-var pdfjsBuild = '6ea5361f';
+var pdfjsVersion = '2.1.130';
+var pdfjsBuild = 'f28ee82b';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -9793,7 +9793,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.1.129',
+    apiVersion: '2.1.130',
     source: {
       data: source.data,
       url: source.url,
@@ -11837,9 +11837,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.1.129';
+var version = '2.1.130';
 exports.version = version;
-var build = '6ea5361f';
+var build = 'f28ee82b';
 exports.build = build;
 
 /***/ }),
@@ -22248,19 +22248,25 @@ function () {
     };
 
     myGM_fetch_request.onload = function (response) {
-      console.log("respnse from fetch_request=");
+      console.log("response from fetch_request=");
       console.log(response);
 
       if (!(0, _network_utils.validateResponseStatus)(response.status)) {
         throw (0, _network_utils.createResponseStatusError)(response.status, url);
       }
 
+      console.log("After validateResponseStatus");
       self._reader = new ReadableStream({
         start: function start(controller) {
+          console.log("in readablestream start,controller=" + controller);
+          console.log(controller);
           controller.enqueue(response.responseText);
         },
-        pull: function pull(controller) {},
+        pull: function pull(controller) {
+          console.log("in readablestream pull,controller=" + controller);
+        },
         cancel: function cancel() {
+          console.log("in readablestream cancel");
           clearInterval(interval);
         }
       });
@@ -22293,6 +22299,8 @@ function () {
       if (!self._isStreamingSupported && self._isRangeSupported) {
         self.cancel(new _util.AbortException('streaming is disabled'));
       }
+
+      console.log("End of onload function");
     };
 
     myGM_fetch_request.onerror = myGM_fetch_request.ontimeout = this._headersCapability.reject;
