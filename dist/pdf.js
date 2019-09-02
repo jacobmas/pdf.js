@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.128';
-var pdfjsBuild = '8f2aa1e4';
+var pdfjsVersion = '2.1.129';
+var pdfjsBuild = '6ea5361f';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -9793,7 +9793,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.1.128',
+    apiVersion: '2.1.129',
     source: {
       data: source.data,
       url: source.url,
@@ -11837,9 +11837,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.1.128';
+var version = '2.1.129';
 exports.version = version;
-var build = '8f2aa1e4';
+var build = '6ea5361f';
 exports.build = build;
 
 /***/ }),
@@ -22285,6 +22285,7 @@ function () {
           allowRangeRequests = _validateRangeRequest.allowRangeRequests,
           suggestedLength = _validateRangeRequest.suggestedLength;
 
+      console.log("postvalidaterangerequest, ");
       self._isRangeSupported = allowRangeRequests;
       self._contentLength = suggestedLength || self._contentLength;
       self._filename = (0, _network_utils.extractFilenameFromHeader)(getResponseHeader);
