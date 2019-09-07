@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.132';
-var pdfjsBuild = '85b5fb1b';
+var pdfjsVersion = '2.1.133';
+var pdfjsBuild = '62c76f34';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -9800,7 +9800,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.1.132',
+    apiVersion: '2.1.133',
     source: {
       data: source.data,
       url: source.url,
@@ -11844,9 +11844,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.1.132';
+var version = '2.1.133';
 exports.version = version;
-var build = '85b5fb1b';
+var build = '62c76f34';
 exports.build = build;
 
 /***/ }),
@@ -22250,62 +22250,48 @@ function () {
       url: source.url,
       method: 'GET',
       headers: this._headers,
-      fetch: true,
+      fetch: false,
       mode: 'no-cors'
     };
 
-    myGM_fetch_request.onload = function (response) {
+    myGM_fetch_request.onload = function (my_response) {
       console.log("response from fetch_request=");
-      console.log(response);
+      console.log(my_response);
 
-      if (!(0, _network_utils.validateResponseStatus)(response.status)) {
-        throw (0, _network_utils.createResponseStatusError)(response.status, url);
+      if (!(0, _network_utils.validateResponseStatus)(my_response.status)) {
+        throw (0, _network_utils.createResponseStatusError)(my_response.status, url);
       }
 
       console.log("After validateResponseStatus");
-      self._reader = new ReadableStream({
-        start: function start(controller) {
-          console.log("in readablestream start,controller=" + controller);
-          console.log(controller);
-          controller.enqueue(response.responseText);
-          console.log(controller);
-        },
-        pull: function pull(controller) {
-          console.log("in readablestream pull,controller=" + controller);
-        },
-        cancel: function cancel() {
-          console.log("in readablestream cancel");
-          clearInterval(interval);
-        }
+      console.log("self=" + JSON.stringify(self));
+      var response = Response(my_response.responseText, {
+        status: my_response.status,
+        statusText: my_response.statusText,
+        headers: my_response.headers
       });
+      this._reader = response.body.getReader();
 
-      self._headersCapability.resolve();
+      this._headersCapability.resolve();
 
       var getResponseHeader = function getResponseHeader(name) {
-        var match,
-            re = new RegExp(name + ":" + "(.*)");
-        match = response.responseHeaders.match(re);
-        return match ? match[1] : "";
+        return response.headers.get(name);
       };
-
-      console.log("self._stream.isHttp=" + self._stream.isHttp + ", _rangeChunkSize " + self._rangeChunkSize + ", disableRange" + self._disableRange);
 
       var _validateRangeRequest = (0, _network_utils.validateRangeRequestCapabilities)({
         getResponseHeader: getResponseHeader,
-        isHttp: self._stream.isHttp,
-        rangeChunkSize: self._rangeChunkSize,
-        disableRange: self._disableRange
+        isHttp: this._stream.isHttp,
+        rangeChunkSize: this._rangeChunkSize,
+        disableRange: this._disableRange
       }),
           allowRangeRequests = _validateRangeRequest.allowRangeRequests,
           suggestedLength = _validateRangeRequest.suggestedLength;
 
-      console.log("postvalidaterangerequest, ");
-      self._isRangeSupported = allowRangeRequests;
-      self._contentLength = suggestedLength || self._contentLength;
-      self._filename = (0, _network_utils.extractFilenameFromHeader)(getResponseHeader);
+      this._isRangeSupported = allowRangeRequests;
+      this._contentLength = suggestedLength || this._contentLength;
+      this._filename = (0, _network_utils.extractFilenameFromHeader)(getResponseHeader);
 
-      if (!self._isStreamingSupported && self._isRangeSupported) {
-        self.cancel(new _util.AbortException('streaming is disabled'));
+      if (!this._isStreamingSupported && this._isRangeSupported) {
+        this.cancel(new _util.AbortException('Streaming is disabled.'));
       }
 
       console.log("End of onload function");
