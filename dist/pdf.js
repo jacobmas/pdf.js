@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.133';
-var pdfjsBuild = '62c76f34';
+var pdfjsVersion = '2.1.134';
+var pdfjsBuild = '01fcb7b1';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -9800,7 +9800,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.1.133',
+    apiVersion: '2.1.134',
     source: {
       data: source.data,
       url: source.url,
@@ -11844,9 +11844,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.1.133';
+var version = '2.1.134';
 exports.version = version;
-var build = '62c76f34';
+var build = '01fcb7b1';
 exports.build = build;
 
 /***/ }),
@@ -22263,7 +22263,8 @@ function () {
       }
 
       console.log("After validateResponseStatus");
-      console.log("self=" + JSON.stringify(self));
+      console.log("self=");
+      console.log(self);
       var response = Response(my_response.responseText, {
         status: my_response.status,
         statusText: my_response.statusText,
