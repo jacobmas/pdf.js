@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.136';
-var pdfjsBuild = '261da58a';
+var pdfjsVersion = '2.1.137';
+var pdfjsBuild = '3c047565';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -9800,7 +9800,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.1.136',
+    apiVersion: '2.1.137',
     source: {
       data: source.data,
       url: source.url,
@@ -11844,9 +11844,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.1.136';
+var version = '2.1.137';
 exports.version = version;
-var build = '261da58a';
+var build = '3c047565';
 exports.build = build;
 
 /***/ }),
@@ -22251,7 +22251,8 @@ function () {
       method: 'GET',
       headers: this._headers,
       fetch: false,
-      mode: 'no-cors'
+      mode: 'no-cors',
+      responseType: 'blob'
     };
 
     myGM_fetch_request.onload = function (my_response) {
@@ -22265,7 +22266,7 @@ function () {
       console.log("After validateResponseStatus");
       console.log("self=");
       console.log(self);
-      var response = new Response(my_response.responseText, {
+      var response = new Response(my_response.response, {
         status: my_response.status,
         statusText: my_response.statusText,
         headers: my_response.headers
@@ -22445,8 +22446,9 @@ function () {
       url: source.url,
       method: 'GET',
       headers: this._headers,
-      fetch: true,
-      mode: 'no-cors'
+      fetch: false,
+      mode: 'no-cors',
+      responseType: 'blob'
     };
 
     myGM_fetch_request.onload = function (response) {
