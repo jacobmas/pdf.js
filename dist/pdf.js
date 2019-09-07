@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.131';
-var pdfjsBuild = '7152b7e1';
+var pdfjsVersion = '2.1.132';
+var pdfjsBuild = '85b5fb1b';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -9753,6 +9753,7 @@ function getDocument(src) {
       }
 
       var networkStream;
+      console.log("rangeTransport=" + rangeTransport);
 
       if (rangeTransport) {
         networkStream = new _transport_stream.PDFDataTransportStream({
@@ -9773,6 +9774,8 @@ function getDocument(src) {
         });
       }
 
+      console.log("networkStream created");
+      console.log(networkStream);
       var messageHandler = new _message_handler.MessageHandler(docId, workerId, worker.port);
       messageHandler.postMessageTransfers = worker.postMessageTransfers;
       var transport = new WorkerTransport(messageHandler, task, networkStream, params);
@@ -9797,7 +9800,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.1.131',
+    apiVersion: '2.1.132',
     source: {
       data: source.data,
       url: source.url,
@@ -11841,9 +11844,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.1.131';
+var version = '2.1.132';
 exports.version = version;
-var build = '7152b7e1';
+var build = '85b5fb1b';
 exports.build = build;
 
 /***/ }),
