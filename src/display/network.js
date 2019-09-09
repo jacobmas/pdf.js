@@ -89,6 +89,7 @@ NetworkManager.prototype = {
   },
 
     request: function NetworkManager_request(args) {
+	console.log("in function NetworkManager_request");
 	var my_GMrequest={}; // the TamperMonkey request
 	var xhr = this.getXhr();
 	var xhrId = this.currXhrId++;
@@ -142,6 +143,8 @@ NetworkManager.prototype = {
 	    my_GMrequest.headers['Range']='bytes=' + rangeStr;
 	}
 	//xhr.send(null);
+	console.log("in function NetworkManager_request, trying my_GMrequest");
+
 	GM_xmlhttprequest(my_GMrequest);
 	return xhrId;
     },

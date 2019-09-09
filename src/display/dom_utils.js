@@ -429,6 +429,7 @@ class DummyStatTimer {
 }
 
 function loadScript(src) {
+    console.log("Loading script in dom_utils.js:loadScript, src="+src);
   return new Promise((resolve, reject) => {
     let script = document.createElement('script');
     script.src = src;

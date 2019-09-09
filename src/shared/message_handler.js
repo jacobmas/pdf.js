@@ -67,7 +67,8 @@ function finalize(promise) {
 function MessageHandler(sourceName, targetName, comObj) {
   this.sourceName = sourceName;
   this.targetName = targetName;
-  this.comObj = comObj;
+    this.comObj = comObj;
+  
   this.callbackId = 1;
   this.streamId = 1;
   this.postMessageTransfers = true;
@@ -163,7 +164,8 @@ MessageHandler.prototype = {
    * @param {Array} [transfers] - Optional list of transfers/ArrayBuffers.
    * @returns {Promise} Promise to be resolved with response data.
    */
-  sendWithPromise(actionName, data, transfers) {
+    sendWithPromise(actionName, data, transfers) {
+
     var callbackId = this.callbackId++;
     var message = {
       sourceName: this.sourceName,

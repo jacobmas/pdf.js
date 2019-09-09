@@ -186,7 +186,8 @@ var WorkerMessageHandler = {
       }
       // making sure postMessage transfers are working
       var supportTransfers = data[0] === 255;
-      handler.postMessageTransfers = supportTransfers;
+	handler.postMessageTransfers = supportTransfers;
+	console.log("Before first request in setup in WorkerMessageHandler");
       // check if the response property is supported by xhr
       var xhr = new XMLHttpRequest();
       var responseExists = 'response' in xhr;

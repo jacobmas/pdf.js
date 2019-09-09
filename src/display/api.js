@@ -243,8 +243,7 @@ function getDocument(src) {
     source = src;
   }
   const params = Object.create(null);
-  let rangeTransport = null, worker = null;
-
+    let rangeTransport = null, worker = null;
   for (const key in source) {
     if (key === 'url' && typeof window !== 'undefined') {
       // The full path is required in the 'url' field.
@@ -327,8 +326,8 @@ function getDocument(src) {
                                  new PDFWorker(workerParams);
     task._worker = worker;
   }
-  const docId = task.docId;
-  worker.promise.then(function() {
+    const docId = task.docId;
+    worker.promise.then(function() {
     if (task.destroyed) {
       throw new Error('Loading aborted');
     }
@@ -338,7 +337,7 @@ function getDocument(src) {
         throw new Error('Loading aborted');
       }
 
-      let networkStream;
+	    let networkStream;
       if (rangeTransport) {
         networkStream = new PDFDataTransportStream({
           length: params.length,
@@ -1393,7 +1392,7 @@ const PDFWorker = (function PDFWorkerClosure() {
       }
     } else {
       const loader = fakeWorkerFilesLoader || function() {
-        return loadScript(getWorkerSrc()).then(function() {
+          return loadScript(getWorkerSrc()).then(function() {
           return window.pdfjsWorker.WorkerMessageHandler;
         });
       };
