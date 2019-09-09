@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.137';
-var pdfjsBuild = '3c047565';
+var pdfjsVersion = '2.1.139';
+var pdfjsBuild = '6c08b2b6';
 
 var pdfjsCoreWorker = __w_pdfjs_require__(1);
 
@@ -377,7 +377,7 @@ var WorkerMessageHandler = {
     var cancelXHRs = null;
     var WorkerTasks = [];
     var apiVersion = docParams.apiVersion;
-    var workerVersion = '2.1.137';
+    var workerVersion = '2.1.139';
 
     if (apiVersion !== workerVersion) {
       throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));
@@ -54112,8 +54112,6 @@ function MessageHandler(sourceName, targetName, comObj) {
   this.sourceName = sourceName;
   this.targetName = targetName;
   this.comObj = comObj;
-  console.log("sourceName=" + sourceName + ",targetName=" + targetName + ", comObj=");
-  console.log(comObj);
   this.callbackId = 1;
   this.streamId = 1;
   this.postMessageTransfers = true;
@@ -54204,7 +54202,6 @@ MessageHandler.prototype = {
     this.postMessage(message, transfers);
   },
   sendWithPromise: function sendWithPromise(actionName, data, transfers) {
-    console.log("In sendWithPromise, actionname=" + actionName);
     var callbackId = this.callbackId++;
     var message = {
       sourceName: this.sourceName,

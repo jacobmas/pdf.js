@@ -676,6 +676,7 @@ var WorkerMessageHandler = {
       });
     });
 
+  
     handler.on('Cleanup', function wphCleanup(data) {
       return pdfManager.cleanup();
     });

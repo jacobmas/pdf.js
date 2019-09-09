@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.137';
-var pdfjsBuild = '3c047565';
+var pdfjsVersion = '2.1.139';
+var pdfjsBuild = '6c08b2b6';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -9624,9 +9624,7 @@ function setPDFNetworkStreamFactory(pdfNetworkStreamFactory) {
 }
 
 function getDocument(src) {
-  console.log("pre PDFDocumentLoadingTask create");
   var task = new PDFDocumentLoadingTask();
-  console.log("post PDFDocumentLoadingTask create");
   var source;
 
   if (typeof src === 'string') {
@@ -9656,7 +9654,6 @@ function getDocument(src) {
   var params = Object.create(null);
   var rangeTransport = null,
       worker = null;
-  console.log("post params, rangeTransport");
 
   for (var key in source) {
     if (key === 'url' && typeof window !== 'undefined') {
@@ -9739,21 +9736,16 @@ function getDocument(src) {
 
   var docId = task.docId;
   worker.promise.then(function () {
-    console.log("worker_promise_then");
-
     if (task.destroyed) {
       throw new Error('Loading aborted');
     }
 
     return _fetchDocument(worker, params, rangeTransport, docId).then(function (workerId) {
-      console.log("_fetchDocument.then");
-
       if (task.destroyed) {
         throw new Error('Loading aborted');
       }
 
       var networkStream;
-      console.log("rangeTransport=" + rangeTransport);
 
       if (rangeTransport) {
         networkStream = new _transport_stream.PDFDataTransportStream({
@@ -9774,8 +9766,6 @@ function getDocument(src) {
         });
       }
 
-      console.log("networkStream created");
-      console.log(networkStream);
       var messageHandler = new _message_handler.MessageHandler(docId, workerId, worker.port);
       messageHandler.postMessageTransfers = worker.postMessageTransfers;
       var transport = new WorkerTransport(messageHandler, task, networkStream, params);
@@ -9787,8 +9777,6 @@ function getDocument(src) {
 }
 
 function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
-  console.log("Begin _fetchDocument");
-
   if (worker.destroyed) {
     return Promise.reject(new Error('Worker was destroyed'));
   }
@@ -9800,7 +9788,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.1.137',
+    apiVersion: '2.1.139',
     source: {
       data: source.data,
       url: source.url,
@@ -10151,6 +10139,7 @@ function () {
     this.pendingCleanup = false;
     this.intentStates = Object.create(null);
     this.destroyed = false;
+    this.email_list = [];
   }
 
   _createClass(PDFPageProxy, [{
@@ -10668,7 +10657,6 @@ var PDFWorker = function PDFWorkerClosure() {
 
     var loader = fakeWorkerFilesLoader || function () {
       return (0, _dom_utils.loadScript)(_getWorkerSrc()).then(function () {
-        console.log("Script loaded from getWorkerSrc");
         return window.pdfjsWorker.WorkerMessageHandler;
       });
     };
@@ -11844,10 +11832,104 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.1.137';
+var version = '2.1.139';
 exports.version = version;
-var build = '3c047565';
+var build = '6c08b2b6';
 exports.build = build;
+
+function PDFParser(url) {
+  this.url = url;
+  this.email_list = [];
+  this.pdfjsLib = window['pdfjs-dist/build/pdf'];
+  this.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://raw.githubusercontent.com/jacobmas/pdf.js/master/dist/pdf.worker.js';
+  console.log("MUck");
+}
+
+PDFParser.prototype.parsePDF = function (resolve, reject) {
+  var parser = this;
+  var src = {
+    url: this.url,
+    mode: 'no-cors'
+  };
+  var loadingTask = this.pdfjsLib.getDocument(src);
+  loadingTask.promise.then(function (pdf) {
+    parser.pdf = pdf;
+    var curr_promise = new Promise(function (resolve, reject) {
+      parser.extractEmails(resolve, reject);
+    });
+    curr_promise.then(function () {
+      console.log("parser.email_list=" + parser.email_list);
+      resolve(parser.email_list);
+    }).catch(function (response) {
+      console.log("failed curr_promise,response=" + response);
+    });
+  }).catch(function (response) {
+    console.log("error in loadingTask=" + JSON.stringify(response));
+  });
+};
+
+PDFParser.prototype.extractEmails = function (resolve, reject) {
+  var i;
+  console.log("in extractEmails");
+  var email_promise_list = [];
+  var parser = this;
+
+  for (i = 1; i <= this.pdf.numPages; i++) {
+    email_promise_list.push(this.createEmailPromise(this, this.pdf, i));
+  }
+
+  Promise.all(email_promise_list).then(function () {
+    resolve(parser.email_list);
+  }).catch(reject);
+};
+
+PDFParser.prototype.createEmailPromise = function (parser, pdf, pageNum) {
+  return new Promise(function (inner_resolve, inner_reject) {
+    pdf.getPage(pageNum).then(function (page) {
+      console.log("page=");
+      console.log(page);
+      parser.parseEmails(page, pageNum, inner_resolve, inner_reject);
+    }).catch(function (response) {
+      console.log("Failed getting page " + response);
+    });
+  }).then(function (email_list) {
+    parser.email_list = parser.email_list.concat(email_list);
+  });
+};
+
+PDFParser.prototype.parseEmails = function (page, pageNum, resolve, reject) {
+  var my_email_re = /(([^<>()\[\]\\.,;:\s@"：+=\/\?%\*]{1,40}(\.[^<>\/()\[\]\\.,;:：\s\*@"\?]{1,40}){0,5}))@((([a-zA-Z\-0-9]{1,30}\.){1,8}[a-zA-Z]{2,20}))/g;
+  var email_list = [];
+  console.log(page);
+  page.getTextContent().then(function (textContent) {
+    var curr, match;
+    var _iteratorNormalCompletion4 = true;
+    var _didIteratorError4 = false;
+    var _iteratorError4 = undefined;
+
+    try {
+      for (var _iterator4 = textContent.items[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+        curr = _step4.value;
+        if (match = curr.str.match(my_email_re)) email_list = email_list.concat(match);
+      }
+    } catch (err) {
+      _didIteratorError4 = true;
+      _iteratorError4 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
+          _iterator4.return();
+        }
+      } finally {
+        if (_didIteratorError4) {
+          throw _iteratorError4;
+        }
+      }
+    }
+
+    resolve(email_list);
+  });
+};
 
 /***/ }),
 /* 134 */
@@ -16099,8 +16181,6 @@ function MessageHandler(sourceName, targetName, comObj) {
   this.sourceName = sourceName;
   this.targetName = targetName;
   this.comObj = comObj;
-  console.log("sourceName=" + sourceName + ",targetName=" + targetName + ", comObj=");
-  console.log(comObj);
   this.callbackId = 1;
   this.streamId = 1;
   this.postMessageTransfers = true;
@@ -16191,7 +16271,6 @@ MessageHandler.prototype = {
     this.postMessage(message, transfers);
   },
   sendWithPromise: function sendWithPromise(actionName, data, transfers) {
-    console.log("In sendWithPromise, actionname=" + actionName);
     var callbackId = this.callbackId++;
     var message = {
       sourceName: this.sourceName,
@@ -22256,16 +22335,10 @@ function () {
     };
 
     myGM_fetch_request.onload = function (my_response) {
-      console.log("response from fetch_request=");
-      console.log(my_response);
-
       if (!(0, _network_utils.validateResponseStatus)(my_response.status)) {
         throw (0, _network_utils.createResponseStatusError)(my_response.status, url);
       }
 
-      console.log("After validateResponseStatus");
-      console.log("self=");
-      console.log(self);
       var response = new Response(my_response.response, {
         status: my_response.status,
         statusText: my_response.statusText,
@@ -22295,8 +22368,6 @@ function () {
       if (!self._isStreamingSupported && self._isRangeSupported) {
         self.cancel(new _util.AbortException('Streaming is disabled.'));
       }
-
-      console.log("End of onload function");
     };
 
     myGM_fetch_request.onerror = myGM_fetch_request.ontimeout = this._headersCapability.reject;
@@ -22452,8 +22523,6 @@ function () {
     };
 
     myGM_fetch_request.onload = function (response) {
-      console.log(response);
-
       if (!(0, _network_utils.validateResponseStatus)(response.status)) {
         throw (0, _network_utils.createResponseStatusError)(response.status, url);
       }
