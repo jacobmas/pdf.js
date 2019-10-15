@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.1.141';
-var pdfjsBuild = '0409f2fd';
+var pdfjsVersion = '2.1.142';
+var pdfjsBuild = '7e158f01';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -9503,6 +9503,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.PDFParser = PDFParser;
 exports.getDocument = getDocument;
 exports.setPDFNetworkStreamFactory = setPDFNetworkStreamFactory;
 exports.build = exports.version = exports.PDFPageProxy = exports.PDFDocumentProxy = exports.PDFWorker = exports.PDFDataRangeTransport = exports.LoopbackPort = void 0;
@@ -9788,7 +9789,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.1.141',
+    apiVersion: '2.1.142',
     source: {
       data: source.data,
       url: source.url,
@@ -11832,9 +11833,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.1.141';
+var version = '2.1.142';
 exports.version = version;
-var build = '0409f2fd';
+var build = '7e158f01';
 exports.build = build;
 
 function PDFParser(url) {

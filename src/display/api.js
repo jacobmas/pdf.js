@@ -2561,6 +2561,7 @@ PDFParser.prototype.parseEmails=function(page,pageNum,resolve,reject) {
 };
 
 export {
+    PDFParser,
   getDocument,
   LoopbackPort,
   PDFDataRangeTransport,
